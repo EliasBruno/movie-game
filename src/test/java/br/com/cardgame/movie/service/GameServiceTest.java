@@ -31,7 +31,7 @@ public class GameServiceTest {
     private GameService gameService;
 
     @BeforeEach
-    void setMockOutput() {
+    void setup() {
         gameRepository = mock(GameRepository.class);
         moviePairRepository = mock(MoviePairRepository.class);
         movieComponent = mock(MovieComponent.class);
