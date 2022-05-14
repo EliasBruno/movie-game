@@ -1,5 +1,6 @@
 package br.com.cardgame.movie.controller;
 
+import br.com.cardgame.movie.controller.request.GameMoviePatch;
 import br.com.cardgame.movie.entity.Game;
 import br.com.cardgame.movie.service.GameService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -20,22 +21,22 @@ public class GameController {
         this.gameService = gameService;
     }
 
-    @GetMapping
+    @GetMapping("start")
     @ResponseStatus(code = HttpStatus.OK)
     public ResponseEntity<Game> start() {
         try {
             Game game = gameService.start();
             return ResponseEntity.ok(game);
-        } catch (IllegalAccessException e) {
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @PatchMapping("/{id}/{movie}/select")
+    @PatchMapping("/{id}/select")
     @ResponseStatus(code = HttpStatus.OK)
-    public ResponseEntity<Game> select(@PathVariable("id") final Long id, @PathVariable("movie") final String movie) {
+    public ResponseEntity<Game> select(@PathVariable("id") final Long id, @RequestBody GameMoviePatch gameMoviePatch) {
         try {
-            Game game = gameService.select(id, movie);
+            Game game = gameService.select(id, gameMoviePatch.movie);
             return ResponseEntity.ok(game);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();

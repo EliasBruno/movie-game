@@ -1,19 +1,18 @@
 package br.com.cardgame.movie.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class MoviePair {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nameA;
-    private Integer launchingA;
-    private String nameB;
-    private Integer launchingB;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "movieOneId")
+    private Movie movieOne;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "movieTwoId")
+    private Movie movieTwo;
 
     public Long getId() {
         return id;
@@ -23,35 +22,19 @@ public class MoviePair {
         this.id = id;
     }
 
-    public String getNameA() {
-        return nameA;
+    public Movie getMovieOne() {
+        return movieOne;
     }
 
-    public void setNameA(String nameA) {
-        this.nameA = nameA;
+    public void setMovieOne(Movie movieOne) {
+        this.movieOne = movieOne;
     }
 
-    public Integer getLaunchingA() {
-        return launchingA;
+    public Movie getMovieTwo() {
+        return movieTwo;
     }
 
-    public void setLaunchingA(Integer launchingA) {
-        this.launchingA = launchingA;
-    }
-
-    public String getNameB() {
-        return nameB;
-    }
-
-    public void setNameB(String nameB) {
-        this.nameB = nameB;
-    }
-
-    public Integer getLaunchingB() {
-        return launchingB;
-    }
-
-    public void setLaunchingB(Integer launchingB) {
-        this.launchingB = launchingB;
+    public void setMovieTwo(Movie movieTwo) {
+        this.movieTwo = movieTwo;
     }
 }

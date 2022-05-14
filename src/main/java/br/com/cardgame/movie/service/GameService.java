@@ -26,31 +26,38 @@ public class GameService {
         this.movieComponent = movieComponent;
     }
 
-    public Game start() throws IllegalAccessException {
-        if(gameRepository.findByEndIsNull()) {
-            throw new IllegalAccessException("Game not is finalization");
-        }
+    public Game start() {
 
-        Long[] gameIds = gameRepository.findByUser(new User());
+        User user = new User();
+        user.setId(1L);
+        user.setUsername("Test");
+        Long[] gameIds = gameRepository.findByUser(user);
         ArrayList<MoviePair> moviesPair = moviePairRepository.findAllByIdNotIn(gameIds);
-
         Game game = new Game();
+        List<Game> games = gameRepository.findByEndIsNull();
+        if(games.size() > 0) return games.get(0);
+
         game.setMoviePair(moviesPair.get(0));
         game.setStart(new Date());
+        game.setUser(user);
         return gameRepository.save(game);
+
     }
 
-    public Game select(Long idGame, String movie) throws Exception {
-        Optional<Game> game = gameRepository.findById(idGame);
+    public Game select(Long idGame, String movieSelected) throws Exception {
+        Optional<Game> game = gameRepository.findByIdAndEndIsNull(idGame);
         if(game.isPresent()) {
             Game gameSave = game.get();
-            String movieOkay = movieComponent.getMovieOkay(gameSave.getMoviePair());
+            String movieVoteMore= movieComponent.getMovieOkay(gameSave.getMoviePair());
 
-            if(movieOkay == movie) gameSave.setErrors(1);
+            if(!movieVoteMore.equals(movieSelected)) {
+                gameSave.setErrors(1);
+                if(gameSave.getErrors() == 3) end(gameSave.getId());
+            } else {
+                gameSave.setSuccess(1);
+            }
 
-            if(gameSave.getErrors() == 3) end(gameSave.getId());
-
-            gameSave.setSelected(movie);
+            gameSave.setSelected(movieSelected);
 
             return gameRepository.save(gameSave);
         }

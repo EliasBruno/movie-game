@@ -2,9 +2,12 @@ package br.com.cardgame.movie.component;
 
 import br.com.cardgame.movie.client.MovieClient;
 import br.com.cardgame.movie.client.MovieOMD;
+import br.com.cardgame.movie.entity.Movie;
 import br.com.cardgame.movie.entity.MoviePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.math.BigDecimal;
 
 @Component
 public class MovieComponent {
@@ -12,19 +15,22 @@ public class MovieComponent {
     MovieClient movieClient;
 
     private Boolean calculatePoint(MovieOMD movieOMDA, MovieOMD movieOMDB) {
-        Integer result1 = Integer.parseInt(movieOMDA.getImdbRating()) * Integer.parseInt(movieOMDA.getImdbVotes());
-        Integer result2 = Integer.parseInt(movieOMDB.getImdbRating()) * Integer.parseInt(movieOMDB.getImdbVotes());
-        return result1 > result2;
+        String voteA = movieOMDA.getImdbVotes().replace(",",".");
+        BigDecimal resultA = new BigDecimal(movieOMDA.getImdbRating()).multiply(new BigDecimal(voteA));
+        String voteB = movieOMDB.getImdbVotes().replace(",",".");
+        BigDecimal resultB = new BigDecimal(movieOMDB.getImdbRating()).multiply(new BigDecimal(voteB));
+        return resultA.compareTo(resultB) > 0;
     }
 
     public String getMovieOkay(MoviePair moviePair) {
-        moviePair.getNameA();
-        MovieOMD movieOne = movieClient.getMovie(moviePair.getNameA(), moviePair.getLaunchingA());
-        MovieOMD movieTwo = movieClient.getMovie(moviePair.getNameA(), moviePair.getLaunchingA());
+        Movie movieOne = moviePair.getMovieOne();
+        MovieOMD movieOMDOne = movieClient.getMovie(movieOne.getName(), movieOne.getLaunching());
+        Movie movieTwo = moviePair.getMovieTwo();
+        MovieOMD movieOMDTwo = movieClient.getMovie(movieTwo.getName(), movieTwo.getLaunching());
 
-        if(this.calculatePoint(movieOne, movieTwo)){
-            return moviePair.getNameA();
+        if(this.calculatePoint(movieOMDOne, movieOMDTwo)){
+            return movieOne.getName();
         }
-        return moviePair.getNameB();
+        return movieTwo.getName();
     }
 }

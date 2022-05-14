@@ -10,13 +10,13 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    private User user;
+    @OneToOne
+    private User user = null;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     private MoviePair moviePair;
 
-    private Boolean success;
+    private Integer success;
 
     private Date start;
 
@@ -62,16 +62,16 @@ public class Game {
         return end;
     }
 
-    public void setEnd(Date end) {
-        this.end = end;
-    }
-
-    public Boolean getSuccess() {
+    public Integer getSuccess() {
         return success;
     }
 
-    public void setSuccess(Boolean success) {
-        this.success = success;
+    public void setSuccess(Integer success) {
+        this.success += success;
+    }
+
+    public void setEnd(Date end) {
+        this.end = end;
     }
 
     public String getSelected() {

@@ -40,9 +40,9 @@ public class GameServiceTest {
     }
 
     @Test
-    void give_call_start_game() throws IllegalAccessException {
+    void give_call_start_game() throws Exception {
 
-        when(gameRepository.findByEndIsNull()).thenReturn(false);
+        when(gameRepository.findByEndIsNull()).thenReturn(new ArrayList<>());
         Long[] ids = {12L};
         when(gameRepository.findByUser(Mockito.any())).thenReturn(ids);
         when(moviePairRepository.findAllByIdNotIn(ids)).thenReturn(getListMoviePair());
@@ -55,8 +55,11 @@ public class GameServiceTest {
 
     @Test
     void give_return_exception_in_start_game() {
-
-        when(gameRepository.findByEndIsNull()).thenReturn(true);
+        ArrayList<Game> games = new ArrayList<>();
+        Game game = new Game();
+        game.setId(1L);
+        games.add(game);
+        when(gameRepository.findByEndIsNull()).thenReturn(games);
         Assertions.assertThrows(IllegalAccessException.class,
             () -> gameService.start(),
             "Game not is finalization"
@@ -86,10 +89,10 @@ public class GameServiceTest {
         ArrayList<MoviePair> moviePairs = new ArrayList();
         MoviePair moviePair = new MoviePair();
         moviePair.setId(12L);
-        moviePair.setNameA("Hulk");
-        moviePair.setLaunchingA(2021);
-        moviePair.setNameB("Matrix");
-        moviePair.setLaunchingB(2014);
+        moviePair.getMovieOne().setName("Hulk");
+        moviePair.getMovieOne().setLaunching(2021);
+        moviePair.getMovieTwo().setName("Matrix");
+        moviePair.getMovieTwo().setLaunching(2014);
         moviePairs.add(moviePair);
         return moviePairs;
     }
