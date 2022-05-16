@@ -2,6 +2,7 @@ package br.com.cardgame.movie.controller;
 
 import br.com.cardgame.movie.controller.request.GameMoviePatch;
 import br.com.cardgame.movie.entity.Game;
+import br.com.cardgame.movie.repository.custom.ScoreRanking;
 import br.com.cardgame.movie.service.GameService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("game-movie")
@@ -54,4 +57,15 @@ public class GameController {
         }
     }
 
+
+    @GetMapping("/score-ranking")
+    @ResponseStatus(code = HttpStatus.OK)
+    public ResponseEntity<List<ScoreRanking>> scoreRanking() {
+        try {
+            List<ScoreRanking> scoreRanking= gameService.scoreRanking();
+            return ResponseEntity.ok(scoreRanking);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

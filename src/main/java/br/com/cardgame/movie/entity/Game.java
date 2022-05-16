@@ -10,13 +10,13 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    private User user = null;
+    @OneToOne(fetch = FetchType.EAGER)
+    private User user;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private MoviePair moviePair;
 
-    private Integer success;
+    private Integer success = 0;
 
     private Date start;
 

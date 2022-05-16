@@ -7,6 +7,7 @@ import br.com.cardgame.movie.entity.MoviePair;
 import br.com.cardgame.movie.entity.User;
 import br.com.cardgame.movie.repository.GameRepository;
 import br.com.cardgame.movie.repository.MoviePairRepository;
+import br.com.cardgame.movie.repository.custom.ScoreRanking;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +35,7 @@ public class GameService {
         Long[] gameIds = gameRepository.findByUser(user);
         ArrayList<MoviePair> moviesPair = moviePairRepository.findAllByIdNotIn(gameIds);
         Game game = new Game();
-        List<Game> games = gameRepository.findByEndIsNull();
+        List<Game> games = gameRepository.findByEndIsNull(user);
         if(games.size() > 0) return games.get(0);
 
         game.setMoviePair(moviesPair.get(0));
@@ -74,4 +75,7 @@ public class GameService {
         throw new Exception("Game Not Found");
     }
 
+    public List<ScoreRanking> scoreRanking() {
+        return gameRepository.findScoreRanking();
+    }
 }
