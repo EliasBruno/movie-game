@@ -14,7 +14,7 @@ public class MovieClient {
     @Value("${omdbapi.api.url}")
     String url = "";
 
-    //@CircuitBreaker(name = "Circuit", fallbackMethod = "getMovieFallback")
+  //  @CircuitBreaker(name = "Circuit", fallbackMethod = "getMovieFallback")
     @Retry(name = "RetryCallApi")
     public MovieOMD getMovie(String name, int year) {
         String param = "/?apikey=ba1b6518&t="+name+"&"+"y="+year;
@@ -23,7 +23,7 @@ public class MovieClient {
         return response.getBody();
     }
 
-    private String getMovieFallback(RuntimeException exception) {
+    private String getMovieFallback(String name, int year, Exception exception) {
         return exception.getMessage();
     }
 }

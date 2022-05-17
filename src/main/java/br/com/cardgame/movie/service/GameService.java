@@ -20,24 +20,31 @@ public class GameService {
     public MoviePairRepository moviePairRepository;
     public GameRepository gameRepository;
     public MovieComponent movieComponent;
-    @Autowired
     TokenService tokenService;
-    @Autowired
     private HttpServletRequest request;
     @Autowired
-    GameService(MoviePairRepository moviePairRepository, GameRepository gameRepository,
-                MovieComponent movieComponent) {
+    GameService(
+        MoviePairRepository moviePairRepository, GameRepository gameRepository,
+        MovieComponent movieComponent, HttpServletRequest request,
+        TokenService tokenService
+    ) {
         this.moviePairRepository = moviePairRepository;
         this.gameRepository = gameRepository;
         this.movieComponent = movieComponent;
+        this.request = request;
+        this.tokenService = tokenService;
     }
-
-    public Game start() {
+    private User recoverUser() {
         String token = request.getHeader("Authorization");
         Long idUser = tokenService.getUserId(token.substring(7, token.length()));
 
         User user = new User();
         user.setId(idUser);
+        return user;
+    }
+
+    public Game start() {
+        User user = recoverUser();
         Long[] gameIds = gameRepository.findByUser(user);
         ArrayList<MoviePair> moviesPair = moviePairRepository.findAllByIdNotIn(gameIds);
         Game game = new Game();

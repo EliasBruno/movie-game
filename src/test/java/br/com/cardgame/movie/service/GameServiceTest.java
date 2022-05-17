@@ -1,6 +1,7 @@
 package br.com.cardgame.movie.service;
 
 import br.com.cardgame.movie.component.MovieComponent;
+import br.com.cardgame.movie.config.security.TokenService;
 import br.com.cardgame.movie.entity.Game;
 import br.com.cardgame.movie.entity.Movie;
 import br.com.cardgame.movie.entity.MoviePair;
@@ -17,6 +18,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
@@ -30,6 +32,10 @@ public class GameServiceTest {
     MoviePairRepository moviePairRepository;
     @Mock
     MovieComponent movieComponent;
+    @Mock
+    HttpServletRequest request;
+    @Mock
+    TokenService tokenService;
     @Autowired
     private GameService gameService;
 
@@ -38,13 +44,18 @@ public class GameServiceTest {
         gameRepository = mock(GameRepository.class);
         moviePairRepository = mock(MoviePairRepository.class);
         movieComponent = mock(MovieComponent.class);
+        request = mock(HttpServletRequest.class);
+        tokenService = mock(TokenService.class);
 
-        gameService = new GameService(moviePairRepository, gameRepository, movieComponent);
+        gameService = new GameService(
+            moviePairRepository, gameRepository, movieComponent, request, tokenService
+        );
     }
 
     @Test
-    void give_call_start_game() throws Exception {
-
+    void give_call_start_game() {
+        when(request.getHeader("Authorization")).thenReturn(getToken());
+        when(tokenService.getUserId(any())).thenReturn(12L);
         when(gameRepository.findByEndIsNull(any())).thenReturn(new ArrayList<>());
         Long[] ids = {12L};
         when(gameRepository.findByUser(Mockito.any())).thenReturn(ids);
@@ -57,13 +68,39 @@ public class GameServiceTest {
     }
 
     @Test
-    void give_call_okay_select() throws Exception {
+    void give_call_okay_select_with_success() throws Exception {
         when(gameRepository.findByIdAndEndIsNull(12L)).thenReturn(Optional.ofNullable(getGame()));
         when(movieComponent.getMovieOkay(Mockito.any())).thenReturn("Hulk");
         gameService.select(12L, "Hulk");
 
         Mockito.verify(gameRepository, times(1)).findByIdAndEndIsNull(12L);
         Mockito.verify(movieComponent, times(1)).getMovieOkay(Mockito.any());
+    }
+
+    @Test
+    void give_call_okay_select_with_exception() throws Exception {
+        when(gameRepository.findByIdAndEndIsNull(12L)).thenReturn(Optional.ofNullable(getGame()));
+
+        Assertions.assertThrows(Exception.class, () -> {
+            gameService.select(1L, "Hulk");
+        });
+    }
+
+    @Test
+    void give_call_end_with_success() throws Exception {
+        when(gameRepository.findById(12L)).thenReturn(Optional.ofNullable(getGame()));
+        gameService.end(12L);
+
+        Mockito.verify(gameRepository, times(1)).findById(12L);
+    }
+
+    @Test
+    void give_call_end_with_exception() throws Exception {
+        when(gameRepository.findById(12L)).thenReturn(Optional.ofNullable(getGame()));
+
+        Assertions.assertThrows(Exception.class, () -> {
+            gameService.end(1L);
+        });
     }
 
     private ArrayList<Game> getListGame() {
@@ -92,11 +129,17 @@ public class GameServiceTest {
         return moviePairs;
     }
 
-    public Game getGame() {
+    private Game getGame() {
         Game game = new Game();
         game.setId(12L);
         game.setStart(new Date());
         game.setMoviePair(getListMoviePair().get(0));
         return game;
+    }
+
+    private String getToken() {
+        return "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJBUEkgR2FtZSBDYXJkIE1vdmllIiwic3ViIjoiMSIsImlhdCI6MTY1Mjc5MTUyOS" +
+                "wiZXhwIjoxNjUyODc3OTI5fQ.MuwzA6Ki4qoCLKpqMgpByQRZBzoD5bd6-vUYQIYJvMrO2JUGJfKsTsEDJ0TIrK1QIbKNPn3tYQu3aK" +
+                "VGtIGMfg";
     }
 }
