@@ -1,5 +1,6 @@
 package br.com.cardgame.movie.client;
 
+import com.sun.xml.bind.v2.TODO;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +15,7 @@ public class MovieClient {
     @Value("${omdbapi.api.url}")
     String url = "";
 
-  //  @CircuitBreaker(name = "Circuit", fallbackMethod = "getMovieFallback")
+    @CircuitBreaker(name = "Circuit", fallbackMethod = "getMovieFallback")
     @Retry(name = "RetryCallApi")
     public MovieOMD getMovie(String name, int year) {
         String param = "/?apikey=ba1b6518&t="+name+"&"+"y="+year;
@@ -23,7 +24,7 @@ public class MovieClient {
         return response.getBody();
     }
 
-    private String getMovieFallback(String name, int year, Exception exception) {
-        return exception.getMessage();
+    private MovieOMD getMovieFallback(java.lang.String x, int y, java.lang.Throwable exception) {
+        return null;
     }
 }
