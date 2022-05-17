@@ -59,8 +59,8 @@ public class MovieClientTest {
                         .withBody(Json.write(movieOMD)))
         );
 
-        MovieOMD movieOMDMock = movieClient.getMovie("Hulk", 2019);
-
-        Assertions.assertNull(movieOMDMock);
+        Assertions.assertThrows(Exception.class, () -> {
+            movieClient.getMovie("Hulk", 2019);
+        });
     }
 }

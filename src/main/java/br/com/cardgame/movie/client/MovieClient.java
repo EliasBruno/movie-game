@@ -24,7 +24,7 @@ public class MovieClient {
         return response.getBody();
     }
 
-    private MovieOMD getMovieFallback(java.lang.String x, int y, java.lang.Throwable exception) {
-        return null;
+    private MovieOMD getMovieFallback(java.lang.String movie, int year, java.lang.Throwable exception) throws Exception {
+        throw new Exception("Not Found movie "+ movie + "of year " + year + "| Error" + exception.getMessage());
     }
 }
