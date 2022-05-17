@@ -29,4 +29,9 @@ public interface GameRepository extends JpaRepository<Game, Long> {
             "group by g.user")
     List<ScoreRanking> findScoreRanking();
 
+    @Query("SELECT g FROM Game g INNER JOIN g.user " +
+            "INNER JOIN FETCH g.moviePair m " +
+            "INNER JOIN FETCH m.movieOne o " +
+            "INNER JOIN FETCH m.movieTwo t WHERE g.id = ?1")
+    Optional<Game> findById(Long id);
 }

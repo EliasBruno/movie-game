@@ -20,8 +20,6 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMoc
 @TestPropertySource(locations = "classpath:application-test.properties")
 public class MovieClientTest {
 
-    WireMockServer wireMockServer = new WireMockServer(wireMockConfig().port(8089));
-
     @Autowired
     private MovieClient movieClient;
 

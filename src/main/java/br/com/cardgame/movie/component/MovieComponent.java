@@ -11,8 +11,12 @@ import java.math.BigDecimal;
 
 @Component
 public class MovieComponent {
+    private MovieClient movieClient;
+
     @Autowired
-    MovieClient movieClient;
+    MovieComponent(MovieClient movieClient) {
+        this.movieClient = movieClient;
+    }
 
     private Boolean calculatePoint(MovieOMD movieOMDA, MovieOMD movieOMDB) {
         String voteA = movieOMDA.getImdbVotes().replace(",",".");

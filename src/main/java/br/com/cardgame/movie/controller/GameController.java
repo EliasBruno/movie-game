@@ -24,7 +24,7 @@ public class GameController {
         this.gameService = gameService;
     }
 
-    @GetMapping("start")
+    @GetMapping("/start")
     @ResponseStatus(code = HttpStatus.OK)
     public ResponseEntity<Game> start() {
         try {
@@ -39,7 +39,7 @@ public class GameController {
     @ResponseStatus(code = HttpStatus.OK)
     public ResponseEntity<Game> select(@PathVariable("id") final Long id, @RequestBody GameMoviePatch gameMoviePatch) {
         try {
-            Game game = gameService.select(id, gameMoviePatch.movie);
+            Game game = gameService.select(id, gameMoviePatch.getMovie());
             return ResponseEntity.ok(game);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();

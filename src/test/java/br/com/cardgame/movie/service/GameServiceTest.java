@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,20 +55,6 @@ public class GameServiceTest {
         Mockito.verify(moviePairRepository, times(1)).findAllByIdNotIn(ids);
 
     }
-
-    /*@Test
-    void give_return_exception_in_start_game() {
-        ArrayList<Game> games = new ArrayList<>();
-        Game game = new Game();
-        game.setId(1L);
-        games.add(game);
-        when(gameRepository.findByEndIsNull()).thenReturn(games);
-        Assertions.assertThrows(IllegalAccessException.class,
-            () -> gameService.start(),
-            "Game not is finalization"
-        );
-
-    }*/
 
     @Test
     void give_call_okay_select() throws Exception {
