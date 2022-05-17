@@ -1,5 +1,6 @@
 package br.com.cardgame.movie.controller;
 
+import br.com.cardgame.movie.config.security.TokenService;
 import br.com.cardgame.movie.controller.request.GameMoviePatch;
 import br.com.cardgame.movie.entity.Game;
 import br.com.cardgame.movie.repository.custom.ScoreRanking;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -40,6 +42,7 @@ public class GameController {
     public ResponseEntity<Game> select(@PathVariable("id") final Long id, @RequestBody GameMoviePatch gameMoviePatch) {
         try {
             Game game = gameService.select(id, gameMoviePatch.getMovie());
+
             return ResponseEntity.ok(game);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();

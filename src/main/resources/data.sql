@@ -1,4 +1,5 @@
 INSERT INTO user(username, password) VALUES('elias', '$2a$10$YM/p06sH10i36PeFOmqkh.2scq243wSnMnun1P.MxluBh6I5ZHV3C');
+INSERT INTO user(username, password) VALUES('jose', '$2a$10$YM/p06sH10i36PeFOmqkh.2scq243wSnMnun1P.MxluBh6I5ZHV3C');
 
 INSERT INTO movie(id, name, launching) VALUES(1, 'Batman', '2021');
 INSERT INTO movie(id, name, launching) VALUES(2, 'Matrix', '2021');

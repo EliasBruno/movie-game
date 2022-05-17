@@ -2,6 +2,7 @@ package br.com.cardgame.movie.service;
 
 import br.com.cardgame.movie.client.MovieClient;
 import br.com.cardgame.movie.component.MovieComponent;
+import br.com.cardgame.movie.config.security.TokenService;
 import br.com.cardgame.movie.entity.Game;
 import br.com.cardgame.movie.entity.MoviePair;
 import br.com.cardgame.movie.entity.User;
@@ -11,6 +12,7 @@ import br.com.cardgame.movie.repository.custom.ScoreRanking;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Service
@@ -18,7 +20,10 @@ public class GameService {
     public MoviePairRepository moviePairRepository;
     public GameRepository gameRepository;
     public MovieComponent movieComponent;
-
+    @Autowired
+    TokenService tokenService;
+    @Autowired
+    private HttpServletRequest request;
     @Autowired
     GameService(MoviePairRepository moviePairRepository, GameRepository gameRepository,
                 MovieComponent movieComponent) {
@@ -28,10 +33,11 @@ public class GameService {
     }
 
     public Game start() {
+        String token = request.getHeader("Authorization");
+        Long idUser = tokenService.getUserId(token.substring(7, token.length()));
 
         User user = new User();
-        user.setId(1L);
-        user.setUsername("Test");
+        user.setId(idUser);
         Long[] gameIds = gameRepository.findByUser(user);
         ArrayList<MoviePair> moviesPair = moviePairRepository.findAllByIdNotIn(gameIds);
         Game game = new Game();

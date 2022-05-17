@@ -29,7 +29,6 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody @Validated LoginRequest loginRequest) {
         UsernamePasswordAuthenticationToken dataLogin = loginRequest.convert();
         try {
-            System.out.println(SignatureAlgorithm.HS256);
             Authentication authentication = authenticationManager.authenticate(dataLogin);
             String token = tokenService.generate(authentication);
             return ResponseEntity.ok(new TokenResponse(token, "Bearer"));
