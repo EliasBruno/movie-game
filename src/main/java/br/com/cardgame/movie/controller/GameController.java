@@ -1,19 +1,14 @@
 package br.com.cardgame.movie.controller;
 
-import br.com.cardgame.movie.config.security.TokenService;
 import br.com.cardgame.movie.controller.request.GameMoviePatch;
 import br.com.cardgame.movie.entity.Game;
 import br.com.cardgame.movie.repository.custom.ScoreRanking;
 import br.com.cardgame.movie.service.GameService;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
