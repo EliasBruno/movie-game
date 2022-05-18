@@ -47,7 +47,7 @@ public class GameControllerTest {
     private ObjectMapper objectMapper;
     @MockBean
     MovieComponent movieComponent;
-    private static String url = "/game-movie";
+    private static String url = "/v1/game-movie";
     private TokenResponse tokenResponse;
 
     public TokenResponse getToken() throws Exception {
